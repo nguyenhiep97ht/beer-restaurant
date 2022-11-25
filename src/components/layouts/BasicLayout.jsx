@@ -25,7 +25,7 @@ const BasicLayout = () => (
         </div>
       </div>
     </Header>
-    <Link to="/home">
+    <Link to="/">
       <div className="m-2 text-orange-600">Trở lại</div>
     </Link>
     <Content
@@ -33,6 +33,7 @@ const BasicLayout = () => (
       style={{
         padding: "0 50px",
         marginTop: 64,
+        height: "calc(100vh - 64px - 40px)",
       }}
     >
       <div
