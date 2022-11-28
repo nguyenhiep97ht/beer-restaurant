@@ -22,7 +22,12 @@ export default function BeerRestaurantHome() {
               }}
               className="flex items-center justify-end"
             >
-              <p style={{ fontSize: "80px", color: "yellow" }}>Dự đoán ngay</p>
+              <p
+                className="lg:text-6xl min-[320px]:text-4xl"
+                style={{ color: "yellow" }}
+              >
+                Dự đoán ngay
+              </p>
             </div>
           </Link>
         </div>
