@@ -10,6 +10,7 @@ import {
 import BeerRestaurantHome from "./pages/home";
 import FootballGuess from "./pages/guess";
 import BasicLayout from "./components/layouts/BasicLayout";
+import AdminPage from "./pages/admin";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "/guess",
         element: <FootballGuess />,
+      },
+      {
+        path: "/admin",
+        element: <AdminPage />,
       },
     ],
   },
