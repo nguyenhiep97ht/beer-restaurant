@@ -1,6 +1,7 @@
 import { useLocation } from "react-router";
 import React, { useState } from "react";
 import { Input, Table } from "antd";
+import moment from "moment";
 
 const columns = [
   {
@@ -18,6 +19,12 @@ const columns = [
     dataIndex: "guessResult",
     key: "guessResult",
   },
+  {
+    title: "Thời gian",
+    dataIndex: "createdDate",
+    key: "createdDate",
+    render: (text) => <a>{moment(text).format("MM/DD/YYYY HH:mm:ss")}</a>,
+  },
 ];
 
 const data = [
@@ -26,24 +33,28 @@ const data = [
     name: "Đinh Văn Hoằng",
     phone: "0971000000",
     guessResult: "Argentina 2 - 0 France",
+    createdDate: new Date(),
   },
   {
     key: "1",
     name: "Nguyễn Văn A",
     phone: "0971000001",
     guessResult: "Argentina 0 - 2 France",
+    createdDate: new Date(),
   },
   {
     key: "1",
     name: "Trần Văn B",
     phone: "0971000002",
     guessResult: "Argentina 2 - 1 France",
+    createdDate: new Date(),
   },
   {
     key: "1",
     name: "Phạm Văn C",
     phone: "0971000003",
     guessResult: "Argentina 1 - 2 France",
+    createdDate: new Date(),
   },
 ];
 
