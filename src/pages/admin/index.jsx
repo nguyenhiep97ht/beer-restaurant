@@ -23,7 +23,9 @@ const columns = [
     title: "Thời gian",
     dataIndex: "createdDate",
     key: "createdDate",
-    render: (text) => <a>{moment(text).format("MM/DD/YYYY HH:mm:ss")}</a>,
+    render: (text) => <a>{moment(text).format("DD/MM/YYYY HH:mm:ss")}</a>,
+    sorter: (a, b) =>
+      Number(new Date(a.createdDate)) - Number(new Date(b.createdDate)),
   },
 ];
 
@@ -33,28 +35,28 @@ const data = [
     name: "Đinh Văn Hoằng",
     phone: "0971000000",
     guessResult: "Argentina 2 - 0 France",
-    createdDate: new Date(),
+    createdDate: "Tuesday, 31 Oct 2023 00:41:04",
   },
   {
     key: "1",
     name: "Nguyễn Văn A",
     phone: "0971000001",
     guessResult: "Argentina 0 - 2 France",
-    createdDate: new Date(),
+    createdDate: "Sunday, 25 Dec 2022 04:37:36",
   },
   {
     key: "1",
     name: "Trần Văn B",
     phone: "0971000002",
     guessResult: "Argentina 2 - 1 France",
-    createdDate: new Date(),
+    createdDate: "Friday, 21 Apr 2023 23:02:43",
   },
   {
     key: "1",
     name: "Phạm Văn C",
     phone: "0971000003",
     guessResult: "Argentina 1 - 2 France",
-    createdDate: new Date(),
+    createdDate: "Friday, 13 Oct 2023 00:48:48",
   },
 ];
 
