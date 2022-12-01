@@ -8,9 +8,11 @@ import { useState } from "react";
 export default function BeerRestaurantHome() {
   const [enterOtp, setEnterOtp] = useState(false);
   const [guessSuccess, setGuessSuccess] = useState(false);
+
   const [user, setUser] = useState(null);
   const [oneScore, setOneScore] = useState(0);
   const [twoScore, setTwoScore] = useState(0);
+
   const onFinish = (values) => {
     console.log("Success:", values);
     setEnterOtp(true);
@@ -267,6 +269,10 @@ export default function BeerRestaurantHome() {
                   name="phone"
                   rules={[
                     { required: true, message: "Vui lòng nhập số điện thoại!" },
+                    {
+                      pattern: "^[0][0-9]{9}$",
+                      message: "Vui lòng nhập đúng định dạng",
+                    },
                   ]}
                 >
                   <Input />
