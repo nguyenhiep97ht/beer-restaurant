@@ -1,8 +1,11 @@
-import { useLocation } from "react-router";
-import React, { useState } from "react";
-import { Input, Table } from "antd";
+import React, { useEffect, useState } from "react";
+import { Input, Table, Row, Col, DatePicker, Space } from "antd";
 import moment from "moment";
 import { find } from "@/services/prediction";
+import dayjs from "dayjs";
+import { debounce } from "lodash";
+
+const { RangePicker } = DatePicker;
 
 const columns = [
   {
@@ -62,40 +65,90 @@ const data = [
 ];
 
 export default function AdminPage() {
-  const { search } = useLocation();
   const [result, setResult] = useState(data);
+  const [range, setRange] = useState([dayjs(new Date()), dayjs(new Date())]);
+  const [phone, setPhone] = useState(null);
+
+  const [tableParams, setTableParams] = useState({
+    pagination: {
+      current: 1,
+      pageSize: 20,
+    },
+  });
+
+  const handleRangeChange = (dates) => {
+    if (dates && dates.length > 0) {
+      setRange(dates);
+    }
+  };
+
+  const fetchData = async () => {
+    const res = await find({
+      fromDate: range && range.length > 0 ? range[0].toDate() : null,
+      toDate: range && range.length > 0 ? range[1].toDate() : null,
+      limit: 20,
+      offset: (tableParams?.pagination?.current - 1) * 20 + 1,
+      phone: phone ? phone : null,
+    });
+    if (res?.success) {
+      setResult(res?.data?.data?.elementList);
+      setTableParams({
+        ...tableParams,
+        pagination: {
+          ...tableParams.pagination,
+          total: res?.data?.data?.total,
+        },
+      });
+    } else {
+      alert("Lỗi, vui lòng thử lại");
+    }
+  };
+
+  useEffect(() => {
+    setResult([]);
+  }, [range, phone]);
+
+  useEffect(() => {
+    fetchData();
+  }, [range, phone, tableParams?.pagination?.current]);
+
+  const handleTableChange = (pagination) => {
+    setTableParams({
+      pagination,
+    });
+  };
+
   return (
     <>
-      {search === "?pass=admin@123" ? (
-        <div className="mt-10 px-4">
-          <Input
-            className="w-1/2 my-4"
-            placeholder="Tìm kiếm tỉ số"
-            onChange={(e) => {
-              if (e.target.value) {
-                const res = result.filter(
-                  (item) =>
-                    item.guessResult
-                      .replace(/\s/g, "")
-                      .includes(e.target.value.replace(/\s/g, "")) ||
-                    item.name
-                      .replace(/\s/g, "")
-                      .includes(e.target.value.replace(/\s/g, "")) ||
-                    item.phone
-                      .replace(/\s/g, "")
-                      .includes(e.target.value.replace(/\s/g, ""))
-                );
-                setResult(res);
-              } else {
-                setResult(data);
-              }
-            }}
-          />
-          <Table columns={columns} dataSource={result} />
-        </div>
-      ) : (
-        "Bạn không có quyền vào trang này"
-      )}
+      <div className="mt-10 px-4">
+        <Row gutter={16} className="mb-2">
+          <Col className="gutter-row" lg={6} xs={24}>
+            <Input
+              placeholder="Tìm kiếm SĐT"
+              onChange={debounce((e) => {
+                if (e.target.value) {
+                  setPhone(e.target.value);
+                }
+              }, 300)}
+            />
+          </Col>
+          <Col className="gutter-row" lg={6} xs={24}>
+            <RangePicker
+              defaultValue={range}
+              onChange={handleRangeChange}
+              className="w-full"
+            />
+          </Col>
+        </Row>
+
+        <Table
+          columns={columns}
+          dataSource={result}
+          pagination={tableParams.pagination}
+          onChange={handleTableChange}
+          scroll={{ x: "100vw" }}
+        />
+      </div>
     </>
   );
 }
